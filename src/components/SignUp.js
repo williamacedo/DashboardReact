@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import SimpleInput from './forms/SimpleInput';
 import ButtonSubmit from './buttons/ButtonSubmit';
 import ButtonSubmitIcon from './buttons/ButtonSubmitIcon';
-import { handleEmailRegister, handlePasswordRegister, handleName, signUp } from '../actions/authActions';
+import Alert from './Notifications/Alert';
+import { handleEmailRegister, handlePasswordRegister, handleName, signUp, closeAlert } from '../actions/authActions';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
@@ -16,10 +17,13 @@ class SignUp extends Component {
 	}
 
 	render() {
-		if (this.props.registerStatus === true) return <Redirect to="/login" />;
+		if (this.props.registerStatus === true) return <Redirect to="/" />;
 		return (
 			<div className="ui center aligned grid">
 			  <div className="column ten wide">
+				{this.props.authMessage != '' &&
+					<Alert text={this.props.authMessage} type={this.props.authType} onPress={this.props.closeAlert} />
+				}				  
 			    <form className="ui form" onSubmit={(e) => this.handleSubmit(e)}>
 			      <div className="ui stacked segment">
 				    <SimpleInput
@@ -65,8 +69,10 @@ const mapToStateToProps = state => {
 		name: state.auth.name,
 		email: state.auth.emailRegister,
 		password: state.auth.passwordRegister,
-		registerStatus: state.auth.registerStatus
+		registerStatus: state.auth.registerStatus,
+		authMessage: state.auth.authMessage,
+		authType: state.auth.authType
 	}
 }
 
-export default connect(mapToStateToProps, { handleEmailRegister, handlePasswordRegister, handleName, signUp })(SignUp);
+export default connect(mapToStateToProps, { handleEmailRegister, handlePasswordRegister, handleName, signUp, closeAlert })(SignUp);

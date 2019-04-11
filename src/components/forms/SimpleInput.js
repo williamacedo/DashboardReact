@@ -18,6 +18,7 @@ const SimpleInput = ({
         placeholder={placeholder}
         onChange={event => textChange(event.target.value)}
         value={textValue}
+        required
       />
     </div>
   );

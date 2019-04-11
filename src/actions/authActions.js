@@ -59,13 +59,67 @@ export const signUp = (name, email, pass) => {
 				dispatch({
 					type: 'registerStatus',
 					payload: {
-						registerStatus: true
+						registerStatus: true,
+						authMessage: 'Your registration was successful.',
+						authType: 'success'
 					}
 				});
 
 			})
-	}
-}
+			.catch(code => {
+				dispatch({
+					type: 'handleError',
+					payload: {
+						authType: 'negative',
+						authMessage: code.message
+					}
+				});				
+			})
+	};
+};
 
+export const signIn = (email, pass) => {
+	return (dispatch, getState, { getFirebase }) => {
+		const firebase = getFirebase();
+
+
+		firebase.auth().signInWithEmailAndPassword(email, pass)
+			.then(user => {
+				dispatch({
+					type: 'clearLogin',
+					payload: {
+						email: '',
+						password: ''
+					}
+				})				
+			})
+			.catch(code => {
+				dispatch({
+					type: 'handleError',
+					payload: {
+						authType: 'negative',
+						authMessage: code.message
+					}
+				})
+			});
+	};	
+};
+
+export const closeAlert = () => dispatch => {
+	dispatch({
+		type: 'changeAuthStatus',
+		payload: {
+			authMessage: ''
+		}
+	});
+};
+
+export const logout = () => {
+	return (dispatch, getState, { getFirebase }) => {
+		const firebase = getFirebase();
+
+		firebase.auth().signOut();
+	};
+};
 
 

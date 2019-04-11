@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const ButtonSubmitIcon = ({ text, icon, styled }) => {
 	return (
-      <button className={"ui button " + styled}>
+      <button type="submit" className={"ui button " + styled}>
 	        <i className={"icon " + icon}></i>
 	        {text}
 	  </button>
